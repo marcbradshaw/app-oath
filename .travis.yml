@@ -6,3 +6,17 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
+
+before_install:
+   # Prevent "Please tell me who you are" errors for certain DZIL configs
+   - git config --global user.name "TravisCI"
+   - cpanm -n Devel::Cover::Report::Coveralls
+
+install:
+    - cpanm --quiet --notestGetopt::Long Convert::Base32 Crypt::Rijndael Digest::HMAC_SHA1 Digest::MD5 JSON POSIX String::Random Term::ReadKey Devel::Cover File::Temp Test::Exception Test::MockObject::Extends Test::More Test::TestCoverage Test::Trap
+
+script: HARNESS_IS_VERBOSE=1 prove -v -Ilib t
+
+#after_script:
+#  - cover -test -make 'prove -Ilib t' -report coveralls
+
