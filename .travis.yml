@@ -17,6 +17,6 @@ install:
 
 script: HARNESS_IS_VERBOSE=1 prove -v -Ilib t
 
-#after_script:
-#  - cover -test -make 'prove -Ilib t' -report coveralls
+after_script:
+  - cover -test -make 'prove -Ilib t' -report coveralls
 
