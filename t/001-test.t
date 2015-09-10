@@ -5,11 +5,12 @@ use warnings;
 
 use Devel::Cover;
 use File::Temp;
+use Pod::Coverage;
 use Test::Exception;
 use Test::MockObject::Extends;
 use Test::More;
 use Test::Pod::Coverage;
-use Test::TestCoverage;
+#use Test::TestCoverage;
 use Test::Trap;
 
 #test_coverage( 'App::OATH' );
