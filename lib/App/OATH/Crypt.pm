@@ -82,7 +82,7 @@ modules which implement the actual encryption and decryption of data
 
 Instantiate a new object
 
-=item I<get_worker_list()>
+=item I<get_workers_list()>
 
 Return an array ref of possible worker types
 

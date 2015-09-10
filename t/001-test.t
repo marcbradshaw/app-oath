@@ -12,10 +12,10 @@ use Test::Pod::Coverage;
 use Test::TestCoverage;
 use Test::Trap;
 
-test_coverage( 'App::OATH' );
-test_coverage( 'App::OATH::Crypt' );
-test_coverage( 'App::OATH::Crypt::Rijndael' );
-test_coverage( 'App::OATH::Crypt::CBC' );
+#test_coverage( 'App::OATH' );
+#test_coverage( 'App::OATH::Crypt' );
+#test_coverage( 'App::OATH::Crypt::Rijndael' );
+#test_coverage( 'App::OATH::Crypt::CBC' );
 
 use_ok( 'App::OATH' );
 use_ok( 'App::OATH::Crypt' );
@@ -312,12 +312,12 @@ subtest 'Pod Coverage' => sub {
     pod_coverage_ok( 'App::OATH::Crypt::CBC' );
 };
 
-subtest 'Coverage' => sub {
-    ok_test_coverage( 'App::OATH' );
-    ok_test_coverage( 'App::OATH::Crypt' );
-    ok_test_coverage( 'App::OATH::Crypt::CBC' );
-    ok_test_coverage( 'App::OATH::Crypt::Rijndael' );
-};
+#subtest 'Coverage' => sub {
+#    ok_test_coverage( 'App::OATH' );
+#    ok_test_coverage( 'App::OATH::Crypt' );
+#    ok_test_coverage( 'App::OATH::Crypt::CBC' );
+#    ok_test_coverage( 'App::OATH::Crypt::Rijndael' );
+#};
 
 done_testing();
 
