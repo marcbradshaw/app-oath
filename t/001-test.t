@@ -14,7 +14,9 @@ use Test::Trap;
 test_coverage( 'App::OATH' );
 
 use_ok( 'App::OATH' );
-  
+use_ok( 'App::OATH::Crypt' );
+use_ok( 'App::OATH::Crypt::Rijndael' );
+
 my $app = App::OATH->new();
 
 subtest 'Instantiate' => sub {
@@ -146,21 +148,58 @@ subtest 'Data Access' => sub {
 
   is( $encrypted->{'alice'} ne $encrypted->{'alice@google.com'}, 1, 'Payloads are not the same' );
     
-  my $aes = $app->get_crypt_object();
-  isa_ok( $aes, 'Crypt::Rijndael' );
-
   my $encrypted_entry;
   use_ok( 'Convert::Base32' );
-  lives_ok( sub{ $encrypted_entry = decode_base32( $encrypted->{'alice'} ) }, 'Valid Base32');
+  my ( $type, $ctext ) = split ':', $encrypted->{'alice'};
+  lives_ok( sub{ $encrypted_entry = decode_base32( $ctext ) }, 'Valid Base32');
   dies_ok(  sub{ my $dummy = decode_base32( 'This is totally bogus' ) }, 'Dies on invalid Base32');
 
-  my $raw;
-  lives_ok( sub{ $raw = $aes->decrypt( $encrypted_entry ); }, 'Can decrypt' );
-  dies_ok(  sub{ my $dummy = $aes->decrypt( 'This is totally bogus' ); }, 'Dist on invalid decrypt' );
 
-  my ( $salt, $check, $payload ) = split( ' ', $raw );
-  is( $check, 'oath', 'Data decrypt check passes' );
-  is ( $payload, 'JBSWY3DPEHPK3PXP', 'Data decrypts correctly' );
+};
+
+subtest 'Crypt object' => sub {
+
+  my $crypt = App::OATH::Crypt->new( 'password' );
+  isa_ok( $crypt, 'App::OATH::Crypt' );
+
+  my @types = ( 'rijndael', 'cbcrijndael', 'cbcblowfish' );
+  foreach my $t ( @types ) {
+
+    subtest 'Crypt type ' . $t => sub {
+
+      $crypt->set_worker( $t );
+
+      my $ptext = 'thisIsATest';
+      my $ctext = $crypt->encrypt( $ptext );
+      isnt( $ctext, $ptext, 'Text was encrypted' );
+
+      my $dtext = $crypt->decrypt( $ctext );
+      is( $dtext, $ptext, 'Text decrypts ok' );
+
+      my ( $worker ) = split ':', $ctext;
+      $crypt->{'workers'}->{ $worker }->{'check'} = 'bogus';
+      $dtext = $crypt->decrypt( $ctext );
+      is( $dtext, undef, 'Text decrypts ok but check fails' );
+
+      dies_ok(  sub{ my $dummy = $crypt->decrypt( 'This is totally bogus' ); }, 'Dies on invalid decrypt' );
+    };
+
+  }
+
+  $crypt->set_worker( q{} );
+  my $ptext = 'thisIsATest';
+  my $ctext = $crypt->encrypt( $ptext );
+  my ( $ctype, $ctext ) = split ':', $ctext;
+  is( $ctype, 'cbcrijndael', 'Default encryption type cbcrijndael' );
+
+  $crypt->set_worker( 'rijndael' );
+  my $ptext = 'thisIsATest';
+  my $ctext = $crypt->encrypt( $ptext );
+  my ( $ctype, $ctext ) = split ':', $ctext;
+  is( $ctype, 'rijndael', 'Specified encryption type rijndael' );
+  $crypt->set_worker( '' );
+  my $dtext = $crypt->decrypt( $ctext );
+  is( $dtext, $ptext, 'Default decryption type rijndael' );
 
 };
 

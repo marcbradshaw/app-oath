@@ -5,13 +5,12 @@ use strict;
 use warnings;
 
 use Convert::Base32;
-use Crypt::Rijndael;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
-use Digest::MD5;
 use JSON;
 use POSIX;
-use String::Random qw{ random_string };
 use Term::ReadKey;
+
+use App::OATH::Crypt;
 
 sub new {
     my ( $class ) = @_;
@@ -238,29 +237,15 @@ sub save_data {
     return;
 }
 
-sub get_crypt_object {
-    my ( $self ) = @_;
-    my $password = $self->get_password();
-    my $md5 = Digest::MD5->new();
-    $md5->add( $password );
-    my $crypt_key = $md5->digest();
-    my $aes = Crypt::Rijndael->new( $crypt_key, Crypt::Rijndael::MODE_CBC() );
-    return $aes;
-}
-
 sub encrypt_data {
     my ( $self ) = @_;
     my $data = $self->get_plaintext();
     $self->drop_password() if $self->{'newpass'};
-    my $aes = $self->get_crypt_object();
+    my $type;
+    my $crypt = App::OATH::Crypt->new( $self->get_password() );
     my $edata = {};
     foreach my $k ( keys %$data ) {
-        my $u = random_string( '..........' ) . ' oath ' . $data->{$k};
-        my $pad = random_string( '.' x ( 16 - ( length( $u ) % 16 ) ) );
-
-        my $e = $aes->encrypt( $pad . $u );
-        $e = encode_base32( $e );
-        $edata->{$k} = $e;
+        $edata->{$k} = $crypt->encrypt( $data->{$k} );
     }
     $self->{'data_encrypted'} = $edata;
     return;
@@ -269,19 +254,15 @@ sub encrypt_data {
 sub decrypt_data {
     my ( $self ) = @_;
     my $data = $self->get_encrypted();
-    my $aes = $self->get_crypt_object();
+    my $crypt = App::OATH::Crypt->new( $self->get_password() );
     my $ddata = {};
     foreach my $k ( keys %$data ) {
-        my $e = $data->{$k};
-        $e = decode_base32( $e );
-        my $u = $aes->decrypt($e);
-        my ( $salt, $check, $payload ) = split( ' ', $u );
-        $check = q{} if ! $check;
-        if ( $check ne 'oath' ) {
+        my $d = $crypt->decrypt( $data->{$k} );
+        if ( ! $d ) {
             print  "Invalid password\n";
             exit 1;
         }
-        $ddata->{$k} = $payload;
+        $ddata->{$k} = $d;
     }
     $self->{'data_plaintext'} = $ddata;
     return;
@@ -491,6 +472,8 @@ Get the current password (from user or cache)
 =head1 DEPENDENCIES
 
   Convert::Base32
+  Crypt::Blowfish
+  Crypt::CBC
   Crypt::Rijndael
   Digest::HMAC_SHA1
   Digest::MD5
