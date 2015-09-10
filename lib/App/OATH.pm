@@ -155,46 +155,43 @@ sub display_codes {
             next if ( index( lc $account, lc $search ) == -1 );
         }
         my $secret = uc $data->{ $account };
-        printf( '%*3$s : %s' . "\n", $account, $self->google_auth( $secret, $counter ), $max_len );
+        printf( '%*3$s : %s' . "\n", $account, $self->oath_auth( $secret, $counter ), $max_len );
     }
     print "\n";
     return;
 }
 
-sub google_auth {
-        my ( $self, $key, $tm ) = @_;
-        my $offset;
-        my $challenge;
-        my @chal;
-        my $secret;
-        my $hash;
-        my @hash;
+sub oath_auth {
+    my ( $self, $key, $tm ) = @_;
 
-        for (my $i=7;$i;$i--) {
-                $chal[$i] = $tm & 0xFF;
-                $tm >>= 8;
-        }
+    my @chal;
+    for (my $i=7;$i;$i--) {
+        $chal[$i] = $tm & 0xFF;
+        $tm >>= 8;
+    }
 
-        {
-                no warnings;
-                $challenge = pack('C*',@chal);
-        }
-        $secret = decode_base32($key);
+    my $challenge;
+    {
+        no warnings;
+        $challenge = pack('C*',@chal);
+    }
 
-        $hash = hmac_sha1($challenge,$secret);
-        @hash = unpack("C*",$hash);
-        $offset = $hash[$#hash]& 0xf ;
+    my $secret = decode_base32($key);
 
-        my $truncatedHash=0;
-        for (my $i=0;$i<4;$i++) {
-                $truncatedHash <<=8;
-                $truncatedHash |= $hash[$offset+$i];
-        }
-        $truncatedHash &=0x7fffffff;
-        $truncatedHash %= 1000000;
-        $truncatedHash = '000000' . $truncatedHash;
-        $truncatedHash = substr( $truncatedHash, -6 );
-        return $truncatedHash;
+    my $hashtxt = hmac_sha1($challenge,$secret);
+    my @hash = unpack("C*",$hashtxt);
+    my $offset = $hash[$#hash]& 0xf ;
+
+    my $truncatedHash=0;
+    for (my $i=0;$i<4;$i++) {
+        $truncatedHash <<=8;
+        $truncatedHash |= $hash[$offset+$i];
+    }
+    $truncatedHash &=0x7fffffff;
+    $truncatedHash %= 1000000;
+    $truncatedHash = substr( '0'x6 . $truncatedHash, -6 );
+
+    return $truncatedHash;
 }
 
 sub set_filename {
@@ -409,7 +406,7 @@ Get the current time based counter
 
 Display a list of codes
 
-=item I<google_auth()>
+=item I<oath_auth()>
 
 Perform the authentication calculations
 

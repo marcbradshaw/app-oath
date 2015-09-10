@@ -247,7 +247,7 @@ subtest 'Counter' => sub {
 subtest 'Gives correct data' => sub {
   my $timestamp = 48058835;
 
-  is( $app->google_auth( 'JBSWY3DPEHPK3PXP', $timestamp ), '205414', 'Decodes properly' );
+  is( $app->oath_auth( 'JBSWY3DPEHPK3PXP', $timestamp ), '205414', 'Decodes properly' );
 
   my $app2 = App::OATH->new();
   $app2->{'password'} = 'secret';
@@ -287,7 +287,7 @@ subtest 'Set newpass' => sub {
 subtest 'Gives correct data with new password' => sub {
   my $timestamp = 48058835;
 
-  is( $app->google_auth( 'JBSWY3DPEHPK3PXP', $timestamp ), '205414', 'Decodes properly' );
+  is( $app->oath_auth( 'JBSWY3DPEHPK3PXP', $timestamp ), '205414', 'Decodes properly' );
 
   my $app2 = App::OATH->new();
   $app2->{'password'} = 'secure';
