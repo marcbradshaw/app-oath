@@ -55,3 +55,54 @@ sub decrypt {
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+App::OATH::Crypt::Rijndael - Crypto modules for Simple OATH authenticator
+
+=head1 DESCRIPTION
+
+Crypto modules for basic Rijndael
+
+=head1 SYNOPSIS
+
+Handles encryption and decryption for the basic Rijndael (not CBC) ciphers
+
+=head1 METHODS
+
+=over
+
+=item I<new()>
+
+Instantiate a new object
+
+=item I<encrypt($data)>
+
+Encrypt the given data
+
+=item I<decrypt($data)>
+
+Decrypt the given data
+
+=back
+
+=head1 DEPENDENCIES
+
+  Convert::Base32
+  Crypt::Rijndael
+  Digest::MD5
+  String::Random
+
+=head1 AUTHORS
+
+Marc Bradshaw E<lt>marc@marcbradshaw.netE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2015
+
+This library is free software; you may redistribute it and/or
+modify it under the same terms as Perl itself.
+

@@ -8,6 +8,7 @@ use File::Temp;
 use Test::Exception;
 use Test::MockObject::Extends;
 use Test::More;
+use Test::Pod::Coverage;
 use Test::TestCoverage;
 use Test::Trap;
 
@@ -302,6 +303,13 @@ subtest 'Gives correct data with new password' => sub {
   @a = trap{ $app2->display_codes() };
   my $expected = "\n           alice : 205414\nalice\@google.com : 205414\n\n";
   is( $trap->stdout, $expected, 'Shows correct codes' );
+};
+
+subtest 'Pod Coverage' => sub {
+    pod_coverage_ok( 'App::OATH' );
+    pod_coverage_ok( 'App::OATH::Crypt' );
+    pod_coverage_ok( 'App::OATH::Crypt::Rijndael' );
+    pod_coverage_ok( 'App::OATH::Crypt::CBC' );
 };
 
 subtest 'Coverage' => sub {

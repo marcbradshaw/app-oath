@@ -65,6 +65,7 @@ sub init {
     $self->{ 'data_plaintext' } = {};
     $self->encrypt_data();
     $self->save_data();
+    return;
 }
 
 sub add_entry {
@@ -235,7 +236,6 @@ sub encrypt_data {
     my ( $self ) = @_;
     my $data = $self->get_plaintext();
     $self->drop_password() if $self->{'newpass'};
-    my $type;
     my $crypt = App::OATH::Crypt->new( $self->get_password() );
     my $edata = {};
     foreach my $k ( keys %$data ) {
@@ -306,7 +306,7 @@ __END__
 
 =head1 NAME
 
-App::OATH -  Simple OATH authenticator
+App::OATH - Simple OATH authenticator
 
 =head1 DESCRIPTION
 
@@ -462,14 +462,9 @@ Get the current password (from user or cache)
 =head1 DEPENDENCIES
 
   Convert::Base32
-  Crypt::Blowfish
-  Crypt::CBC
-  Crypt::Rijndael
   Digest::HMAC_SHA1
-  Digest::MD5
   JSON
   POSIX
-  String::Random
   Term::ReadKey
 
 =head1 AUTHORS
