@@ -435,10 +435,6 @@ Load in data from file
 
 Save data to file
 
-=item I<get_crypt_object()>
-
-Get the crypt object
-
 =item I<encrypt_data()>
 
 Encrypt the data
