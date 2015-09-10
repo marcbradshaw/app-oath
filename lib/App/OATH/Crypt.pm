@@ -8,7 +8,7 @@ use App::OATH::Crypt::Rijndael;
 use App::OATH::Crypt::CBC;
 
 sub new {
-    my ( $class, $password, $type ) = @_;
+    my ( $class, $password ) = @_;
     
     my $self = {
         'workers' => {
@@ -20,6 +20,12 @@ sub new {
     };
     bless $self, $class;
     return $self;
+}
+
+sub get_workers_list {
+    my ( $self ) = @_;
+    my @list = sort keys %{ $self->{'workers'} };
+    return \@list;
 }
 
 sub set_worker {

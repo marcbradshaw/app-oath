@@ -12,10 +12,14 @@ use Test::TestCoverage;
 use Test::Trap;
 
 test_coverage( 'App::OATH' );
+test_coverage( 'App::OATH::Crypt' );
+test_coverage( 'App::OATH::Crypt::Rijndael' );
+test_coverage( 'App::OATH::Crypt::CBC' );
 
 use_ok( 'App::OATH' );
 use_ok( 'App::OATH::Crypt' );
 use_ok( 'App::OATH::Crypt::Rijndael' );
+use_ok( 'App::OATH::Crypt::CBC' );
 
 my $app = App::OATH->new();
 
@@ -162,8 +166,7 @@ subtest 'Crypt object' => sub {
   my $crypt = App::OATH::Crypt->new( 'password' );
   isa_ok( $crypt, 'App::OATH::Crypt' );
 
-  my @types = ( 'rijndael', 'cbcrijndael', 'cbcblowfish' );
-  foreach my $t ( @types ) {
+  foreach my $t ( @{ $crypt->get_workers_list() } ) {
 
     subtest 'Crypt type ' . $t => sub {
 
@@ -180,6 +183,7 @@ subtest 'Crypt object' => sub {
       $crypt->{'workers'}->{ $worker }->{'check'} = 'bogus';
       $dtext = $crypt->decrypt( $ctext );
       is( $dtext, undef, 'Text decrypts ok but check fails' );
+      $crypt->{'workers'}->{ $worker }->{'check'} = 'oath';
 
       dies_ok(  sub{ my $dummy = $crypt->decrypt( 'This is totally bogus' ); }, 'Dies on invalid decrypt' );
     };
@@ -193,13 +197,17 @@ subtest 'Crypt object' => sub {
   is( $ctype, 'cbcrijndael', 'Default encryption type cbcrijndael' );
 
   $crypt->set_worker( 'rijndael' );
-  my $ptext = 'thisIsATest';
-  my $ctext = $crypt->encrypt( $ptext );
-  my ( $ctype, $ctext ) = split ':', $ctext;
+  $ptext = 'thisIsATest';
+  $ctext = $crypt->encrypt( $ptext );
+  ( $ctype, $ctext ) = split ':', $ctext;
   is( $ctype, 'rijndael', 'Specified encryption type rijndael' );
   $crypt->set_worker( '' );
   my $dtext = $crypt->decrypt( $ctext );
   is( $dtext, $ptext, 'Default decryption type rijndael' );
+
+  dies_ok( sub{ $crypt->set_worker( 'NoSuchWorker' ); }, 'Dies on set invalid worker' );
+
+  dies_ok( sub{ $crypt->decrypt( 'NoSuchWorker:Gibberish' ); }, 'Dies on decrypt invalid worker' );
 
 };
 
@@ -230,7 +238,9 @@ subtest 'New instance decrypt invalid password' => sub {
 subtest 'Counter' => sub {
   my $baseline = int( time() / 30 );
   my $counter = $app->get_counter();
-  is( ( $counter == $baseline or $counter = $baseline + 1 ), 1, 'Counter returns proper value' );
+  # Crazy logic is beetter for testing
+  is( ( $counter >= $baseline     ), 1, 'Counter returns proper value low check' );
+  is( ( $counter <= $baseline + 1 ), 1, 'Counter returns proper value high check' );
 };
 
 subtest 'Gives correct data' => sub {
@@ -296,6 +306,9 @@ subtest 'Gives correct data with new password' => sub {
 
 subtest 'Coverage' => sub {
     ok_test_coverage( 'App::OATH' );
+    ok_test_coverage( 'App::OATH::Crypt' );
+    ok_test_coverage( 'App::OATH::Crypt::CBC' );
+    ok_test_coverage( 'App::OATH::Crypt::Rijndael' );
 };
 
 done_testing();

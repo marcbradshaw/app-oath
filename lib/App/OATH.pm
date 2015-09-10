@@ -72,8 +72,6 @@ sub add_entry {
     my $search = $self->get_search();
     my $data = $self->get_plaintext();
 
-    my $save_required = 0;
-
     if ( $entry =~ /^otpauth:\/\/totp\// ) {
         # Better parsing required
         my ( $key, $rest ) = $entry =~ /^otpauth:\/\/totp\/(.*)\?(.*)$/;
@@ -85,7 +83,6 @@ sub add_entry {
         else {
             print "Adding OTP for $key\n";
             $self->{'data_plaintext'}->{$key} = $value;
-            $save_required = 1;
         }
         
     }
@@ -98,7 +95,6 @@ sub add_entry {
         else {
             print "Adding OTP for $key\n";
             $self->{'data_plaintext'}->{$key} = $value;
-            $save_required = 1;
         }
         
     }
@@ -107,10 +103,8 @@ sub add_entry {
         exit 1;
     }
 
-    if ( $save_required ) {
-        $self->encrypt_data();
-        $self->save_data();
-    }
+    $self->encrypt_data();
+    $self->save_data();
     
     return;
 }
