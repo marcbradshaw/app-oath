@@ -121,10 +121,6 @@ You most likely won't ever want to call these directly, you should use the inclu
 
     Save data to file
 
-- _get\_crypt\_object()_
-
-    Get the crypt object
-
 - _encrypt\_data()_
 
     Encrypt the data
@@ -153,17 +149,11 @@ You most likely won't ever want to call these directly, you should use the inclu
 
     Get the current password (from user or cache)
 
-#CODE CLIMATE
-
-[Code on GitHub](https://github.com/marcbradshaw/app-oath)
-
-[![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath)
-
-[![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath)
-
 # DEPENDENCIES
 
     Convert::Base32
+    Crypt::Blowfish
+    Crypt::CBC
     Crypt::Rijndael
     Digest::HMAC_SHA1
     Digest::MD5
@@ -182,3 +172,11 @@ Copyright 2015
 
 This library is free software; you may redistribute it and/or
 modify it under the same terms as Perl itself.
+
+# CODE CLIMATE
+
+[Code on GitHub](https://github.com/marcbradshaw/app-oath)
+
+[![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath)
+
+[![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath)
