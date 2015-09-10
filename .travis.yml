@@ -13,27 +13,7 @@ before_install:
    - cpanm -n Devel::Cover::Report::Coveralls
 
 install:
-    - cpanm --quiet --notest \
-        Convert::Base32 \
-        Crypt::Blowfish \
-        Crypt::CBC \
-        Crypt::Rijndael \
-        Devel::Cover \
-        Digest::HMAC_SHA1 \
-        Digest::MD5 \
-        File::Temp \
-        Getopt::Long \
-        JSON \
-        Pod::Coverage \
-        POSIX \
-        String::Random \
-        Term::ReadKey \
-        Test::Exception \
-        Test::MockObject::Extends \
-        Test::More \
-        Test::Pod::Coverage \
-        Test::TestCoverage \
-        Test::Trap
+    - cpanm --quiet --notest Convert::Base32 Crypt::Blowfish Crypt::CBC Crypt::Rijndael Devel::Cover Digest::HMAC_SHA1 Digest::MD5 File::Temp Getopt::Long JSON Pod::Coverage POSIX String::Random Term::ReadKey Test::Exception Test::MockObject::Extends Test::More Test::Pod::Coverage Test::TestCoverage Test::Trap
 
 script: HARNESS_IS_VERBOSE=1 prove -v -Ilib t
 
