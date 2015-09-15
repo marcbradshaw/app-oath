@@ -358,7 +358,7 @@ options:
 
 =head1 SECURITY
 
-Tokens are encrypted on disk using Rijndael, the identifiers are not encrypted and can be read in plaintext
+Tokens are encrypted on disk, the identifiers are not encrypted and can be read in plaintext
 from the file.
 
 This is intended to secure against casual reading of the file, but as always, if you have specific security requirements
