@@ -475,12 +475,3 @@ Copyright 2015
 This library is free software; you may redistribute it and/or
 modify it under the same terms as Perl itself.
 
-=for markdown # CODE CLIMATE
-
-=for markdown [Code on GitHub](https://github.com/marcbradshaw/app-oath)
-
-=for markdown [![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath)
-
-=for markdown [![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath)
-
-
