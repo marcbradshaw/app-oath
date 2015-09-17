@@ -2,6 +2,10 @@
 
 App::OATH -  Simple OATH authenticator
 
+# BADGES
+
+[![Code on GitHub](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/marcbradshaw/app-oath) [![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath) [![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath) [![Open Issues](https://img.shields.io/github/issues/marcbradshaw/app-oath.svg)](https://github.com/marcbradshaw/app-oath/issues) [![Dist on CPAN](https://img.shields.io/cpan/v/App-OATH.svg)](https://metacpan.org/release/App-OATH) [![CPANTS](https://img.shields.io/badge/cpants-kwalitee-blue.svg)](http://cpants.cpanauthors.org/dist/App-OATH)
+
 # DESCRIPTION
 
 Simple command line OATH authenticator written in Perl.
@@ -72,12 +76,3 @@ Copyright 2015
 This library is free software; you may redistribute it and/or
 modify it under the same terms as Perl itself.
 
-# CODE CLIMATE
-
-[Code on GitHub](https://github.com/marcbradshaw/app-oath)
-
-[![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath)
-
-[![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath)
-
-[CPANTS](http://cpants.cpanauthors.org/dist/App-OATH)
