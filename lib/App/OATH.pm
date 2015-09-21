@@ -197,12 +197,7 @@ sub oath_auth {
 
 sub set_filename {
     my ( $self, $filename ) = @_;
-
-    if ( defined( $self->{'filename'} ) ) {
-        # Unlock if filename has changed
-        $self->drop_lock() if $self->{'filename'} ne $filename;
-    }
-
+    $self->drop_lock() if $self->{'filename'} ne $filename;
     $self->{'filename'} = $filename;
     return;
 }
