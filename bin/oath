@@ -38,6 +38,8 @@ $app->set_search( $search )   if $search;
 $app->set_filename( $file )   if $file;
 $app->init()                  if $init;
 
+$app->get_lock() || die 'File is already locked';
+
 if ( $newpass ) {
     $app->set_newpass( $newpass );
     if ( $add ) {
@@ -57,6 +59,8 @@ elsif ( $list ) {
 else {
     $app->display_codes();
 }
+
+$app->drop_lock();
 
 exit 0;
 
