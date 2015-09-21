@@ -330,6 +330,14 @@ subtest 'Locking' => sub {
     $app->set_filename( $filename2 );
     my $lock5 = $app->get_lock();
     is( $lock5, 0, 'Still locked after false name change' );
+    $app->drop_lock();
+};
+
+subtest 'Invalid Filename' => sub {
+    my $invalid_filename = $filename . '/invalid';
+    $app->set_filename( $invalid_filename );
+    dies_ok( sub{ $app->save_data(); }, 'Dies on invalid filename save' );
+    $app->set_filename( $filename );
 };
 
 subtest 'Pod Coverage' => sub {
