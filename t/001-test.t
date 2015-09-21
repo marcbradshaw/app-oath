@@ -306,6 +306,14 @@ subtest 'Gives correct data with new password' => sub {
   is( $trap->stdout, $expected, 'Shows correct codes' );
 };
 
+subtest 'Locking' => sub {
+    my $lock1 = $app->get_lock();
+    is( $lock1, 1, 'Could lock' );
+    my $lock2 = $app->get_lock();
+    is( $lock2, 0, 'Already locked lock' );
+
+};
+
 subtest 'Pod Coverage' => sub {
     pod_coverage_ok( 'App::OATH' );
     pod_coverage_ok( 'App::OATH::Crypt' );

@@ -6,6 +6,7 @@ use warnings;
 
 use Convert::Base32;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
+use Fcntl ':flock';
 use JSON;
 use POSIX;
 use Term::ReadKey;
@@ -196,6 +197,12 @@ sub oath_auth {
 
 sub set_filename {
     my ( $self, $filename ) = @_;
+
+    if ( $self->{'filaname'} ne $filename ) {
+        # Unlock if filename has changed
+        $self->drop_lock();
+    }
+
     $self->{'filename'} = $filename;
     return;
 }
@@ -204,6 +211,35 @@ sub get_filename {
     my ( $self ) = @_;
     return $self->{'filename'};
 }
+
+sub get_lockfilename {
+    my ( $self ) = @_;
+    my $filename = $self->get_filename();
+    my $lockfilename = $filename . '.lock';
+    return $lockfilename;
+}
+
+sub drop_lock {
+    my ( $self ) = @_;
+    delete $self->{'lockhandle'};
+    return;
+}
+sub get_lock {
+    my ( $self ) = @_;
+
+    my $lockh;
+    my $lockfilename = $self->get_lockfilename();
+    if ( ! -e $lockfilename ) {
+        open $lockh, '>', $lockfilename;
+        close $lockh;
+    }
+    open $lockh, '<', $lockfilename;
+    if ( !flock( $lockh, LOCK_EX | LOCK_NB ) ) {
+        return 0;
+    }
+    $self->{'lockhandle'} = $lockh;
+    return 1;
+} 
 
 sub load_data {
     my ( $self ) = @_;
@@ -453,6 +489,18 @@ Drop the password
 =item I<get_password()>
 
 Get the current password (from user or cache)
+
+=item I<get_lockfilename()>
+
+Return a filename for the lock file, typically this is filename appended with .lock
+
+=item I<drop_lock()>
+
+Drop the lock (unlock)
+
+=item I<get_lock()>
+
+Get a lock, return 1 on success or 0 on failure
 
 =back
 
