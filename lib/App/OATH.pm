@@ -327,6 +327,7 @@ sub get_password {
     ReadMode(0);
     print "\n";
     $self->{'password'} = $password;
+    delete $self->{'newpass'};
     return $password;
 }
 

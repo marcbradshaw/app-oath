@@ -317,6 +317,42 @@ subtest 'Gives correct data with new password' => sub {
   is( $trap->stdout, $expected, 'Shows correct codes' );
 };
 
+subtest 'Key sort and length' => sub {
+  $app->{'password'} = 'secret';
+  delete $app->{'search'};
+  $app->set_filename( $filename2 );
+  $app->init();
+
+  my @a;
+
+  @a = trap{ $app->add_entry( 'alice:JBSWY3DPEHPK3PXP' ); };
+  is( $trap->exit, undef, 'New key succeeds' );
+  is( $trap->stdout, "Adding OTP for alice\n", 'Gives success message' );
+
+  @a = trap{ $app->add_entry( 'bob:JBSWY3DPEHPK3PXP' ); };
+  is( $trap->exit, undef, 'New key succeeds' );
+  is( $trap->stdout, "Adding OTP for bob\n", 'Gives success message' );
+
+  @a = trap{ $app->add_entry( 'catriona:JBSWY3DPEHPK3PXP' ); };
+  is( $trap->exit, undef, 'New key succeeds' );
+  is( $trap->stdout, "Adding OTP for catriona\n", 'Gives success message' );
+
+  my $timestamp = 48058835;
+
+  my $newapp = Test::MockObject::Extends->new( $app );
+  isa_ok( $newapp, 'T::MO::E::c' );
+  $newapp->mock( 'get_counter', sub{ return 48058835; } );
+  my $counter = $newapp->get_counter();
+  is( $counter, $timestamp, 'Mocked get counter' );
+
+  @a = trap{ $app->display_codes() };
+  my $expected = "\n   alice : 205414\n     bob : 205414\ncatriona : 205414\n\n";
+  is( $trap->stdout, $expected, 'Shows correct codes properly sorted and justified' );
+
+  $app->set_filename( $filename );
+
+};
+
 subtest 'Locking' => sub {
     my $lock1 = $app->get_lock();
     is( $lock1, 1, 'Could lock' );
