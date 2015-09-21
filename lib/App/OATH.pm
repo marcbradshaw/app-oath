@@ -232,6 +232,7 @@ sub get_lock {
     if ( ! -e $lockfilename ) {
         open $lockh, '>', $lockfilename;
         close $lockh;
+        chmod( 0600, $lockfilename );
     }
     open $lockh, '<', $lockfilename;
     if ( !flock( $lockh, LOCK_EX | LOCK_NB ) ) {
@@ -262,6 +263,7 @@ sub save_data {
     open( my $file, '>', $filename ) || die "cannot open file $!";
     print $file $content;
     close $file;
+    chmod( 0600, $filename );
     return;
 }
 
