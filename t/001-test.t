@@ -222,6 +222,10 @@ subtest 'Crypt object' => sub {
 
   dies_ok( sub{ $crypt->decrypt( 'NoSuchWorker:Gibberish' ); }, 'Dies on decrypt invalid worker' );
 
+  my $bad_crypt = 'cbcrijndael:' . $crypt->{'workers'}->{'cbcrijndael'}->encrypt('bogus');
+  my $bad_decrypt = $crypt->decrypt( $bad_crypt );
+  is( $bad_decrypt, undef, 'Bad check returns undef' );
+
 };
 
 subtest 'New instance decrypt' => sub {
