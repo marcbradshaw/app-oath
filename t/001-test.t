@@ -53,6 +53,17 @@ my $filename;
     END{ unlink $filename; };
 }
 
+my $filename2;
+{
+    my $tmp_file = File::Temp->new(
+        'TEMPLATE' => 'app-oath-unit-tests-XXXXXXXX',
+        'UNLINK'   => 0,
+    );
+    $filename2 = $tmp_file->filename();
+    unlink $filename2;
+    END{ unlink $filename2; };
+}
+
 subtest 'Filename accessors' => sub {
   is( $app->get_filename(), $ENV{'HOME'} . '/.oath.json', 'Default undef' );
   $app->set_filename( $filename );
@@ -194,8 +205,8 @@ subtest 'Crypt object' => sub {
 
   $crypt->set_worker( q{} );
   my $ptext = 'thisIsATest';
-  my $ctext = $crypt->encrypt( $ptext );
-  my ( $ctype, $ctext ) = split ':', $ctext;
+  my $ctexta = $crypt->encrypt( $ptext );
+  my ( $ctype, $ctext ) = split ':', $ctexta;
   is( $ctype, 'cbcrijndael', 'Default encryption type cbcrijndael' );
 
   $crypt->set_worker( 'rijndael' );
@@ -310,8 +321,15 @@ subtest 'Locking' => sub {
     my $lock1 = $app->get_lock();
     is( $lock1, 1, 'Could lock' );
     my $lock2 = $app->get_lock();
-    is( $lock2, 0, 'Already locked lock' );
-
+    is( $lock2, 0, 'Already locked' );
+    $app->set_filename( $filename2 );
+    my $lock3 = $app->get_lock();
+    is( $lock3, 1, 'Could lock after file change' );
+    my $lock4 = $app->get_lock();
+    is( $lock4, 0, 'Already locked' );
+    $app->set_filename( $filename2 );
+    my $lock5 = $app->get_lock();
+    is( $lock5, 0, 'Still locked after false name change' );
 };
 
 subtest 'Pod Coverage' => sub {
