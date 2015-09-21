@@ -6,6 +6,7 @@ use warnings;
 
 use App::OATH::Crypt::Rijndael;
 use App::OATH::Crypt::CBC;
+use String::Random qw{ random_string };
 
 sub new {
     my ( $class, $password ) = @_;
@@ -16,7 +17,8 @@ sub new {
             'cbcrijndael' => App::OATH::Crypt::CBC->new({ 'password' => $password, 'type' => 'Rijndael', }),
             'cbcblowfish' => App::OATH::Crypt::CBC->new({ 'password' => $password, 'type' => 'Blowfish', }),
         },
-        'type' => q{},
+        'type'  => q{},
+        'check' => 'oath',
     };
     bless $self, $class;
     return $self;
@@ -42,7 +44,8 @@ sub encrypt {
     my $type = $self->{'type'};
     $type = 'cbcrijndael' if $type eq q{};
     my $worker = $self->{'workers'}->{$type};
-    return $type . ':' . $worker->encrypt( $data );
+    my $u = random_string( '..........' ) . ' ' . $self->{'check'} . ' ' . $data;
+    return $type . ':' . $worker->encrypt( $u );
 }
 
 sub decrypt {
@@ -54,7 +57,13 @@ sub decrypt {
     }
     my $worker = $self->{'workers'}->{$type};
     die "Unknown encryption type $type" if ! $worker;
-    return $worker->decrypt( $data );
+    my $u = $worker->decrypt( $data );
+    my ( $salt, $check, $payload ) = split( ' ', $u );
+    $check = q{} if ! $check;
+    if ( $check ne $self->{'check'} ) {
+        return;
+    }
+    return $payload;
 }
 
 1;

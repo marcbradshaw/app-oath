@@ -193,10 +193,10 @@ subtest 'Crypt object' => sub {
       is( $dtext, $ptext, 'Text decrypts ok' );
 
       my ( $worker ) = split ':', $ctext;
-      $crypt->{'workers'}->{ $worker }->{'check'} = 'bogus';
+      $crypt->{'check'} = 'bogus';
       $dtext = $crypt->decrypt( $ctext );
       is( $dtext, undef, 'Text decrypts ok but check fails' );
-      $crypt->{'workers'}->{ $worker }->{'check'} = 'oath';
+      $crypt->{'check'} = 'oath';
 
       dies_ok(  sub{ my $dummy = $crypt->decrypt( 'This is totally bogus' ); }, 'Dies on invalid decrypt' );
     };
