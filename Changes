@@ -1,6 +1,8 @@
 
 {{$NEXT}}
 
+ - Add a lock file to avoid race conditions
+
 1.20150914 2015-09-14 Australia/Melbourne
 
  - First release
