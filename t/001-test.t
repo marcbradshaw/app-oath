@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Devel::Cover;
+use File::HomeDir qw{ my_home };
 use File::Temp;
 use Pod::Coverage;
 use Test::Exception;
@@ -65,7 +66,7 @@ my $filename2;
 }
 
 subtest 'Filename accessors' => sub {
-  is( $app->get_filename(), $ENV{'HOME'} . '/.oath.json', 'Default undef' );
+  is( $app->get_filename(), my_home() . '/.oath.json', 'Default undef' );
   $app->set_filename( $filename );
   is( $app->get_filename(), $filename, 'Value set/get' );
 };

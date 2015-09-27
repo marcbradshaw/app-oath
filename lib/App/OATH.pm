@@ -7,6 +7,7 @@ use warnings;
 use Convert::Base32;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
 use Fcntl ':flock';
+use File::HomeDir qw{ my_home };
 use JSON;
 use POSIX;
 use Term::ReadKey;
@@ -16,7 +17,7 @@ use App::OATH::Crypt;
 sub new {
     my ( $class ) = @_;
     my $self = {
-        'filename' => $ENV{'HOME'} . '/.oath.json',
+        'filename' => my_home() . '/.oath.json',
     };
     bless $self, $class;
     return $self;
