@@ -508,6 +508,8 @@ Get a lock, return 1 on success or 0 on failure
 
   Convert::Base32
   Digest::HMAC_SHA1
+  Fcntl
+  File::HomeDir
   JSON
   POSIX
   Term::ReadKey
