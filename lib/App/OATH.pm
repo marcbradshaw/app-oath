@@ -319,9 +319,16 @@ sub drop_password {
 }
 
 sub _read_password_stdin {
-    my ( $self ) = @_;
-    my $password = read_password('Password:');
-    return $password;
+    # uncoverable subroutine
+    # Cannot be covered as we do not yet
+    # have a reliable method of faking this
+    # input.
+    # This is fine as we are simply acting as
+    # a wrapper around Term::ReadPassword
+    # NB, Term::ReadPassword is not Win32 safe
+    my ( $self ) = @_; # uncoverable statement
+    my $password = read_password('Password:'); # uncoverable statement
+    return $password; # uncoverable statement
 }
 
 sub get_password {
