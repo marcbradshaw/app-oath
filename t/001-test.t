@@ -85,19 +85,18 @@ subtest 'Dies on file does not exist' => sub {
 
 subtest 'Password accessors' => sub {
   # Add test for stdin
+  my $newapp = Test::MockObject::Extends->new( $app );
+  isa_ok( $newapp, 'T::MO::E::a' );
+  $newapp->mock( '_read_password_stdin', sub{ return 'secure'; } );
+  $newapp->{'password'} = 'secret';
+  is( $newapp->get_password(), 'secret', 'Get password' );
+
+  $newapp->drop_password();
+  is ( $newapp->{'password'}, undef, 'Drop password' );
+
+  is( $newapp->get_password(), 'secure', 'Get password from STDIN' );
   $app->{'password'} = 'secret';
-  is( $app->get_password(), 'secret', 'Get password' );
 
-  $app->drop_password();
-  is ( $app->{'password'}, undef, 'Drop password' );
-
-  {
-    open my $stdin, '<', \ "secure\n";
-    local *STDIN = $stdin;
-    is( $app->get_password(), 'secure', 'Get password from STDIN' );
-  }
-
-  $app->{'password'} = 'secret';
 };
 
 subtest 'Init new file' => sub {
@@ -270,7 +269,7 @@ subtest 'Gives correct data' => sub {
   $app2->{'password'} = 'secret';
   $app2->set_filename( $filename );
   my $newapp = Test::MockObject::Extends->new( $app2 );
-  isa_ok( $newapp, 'T::MO::E::a' );
+  isa_ok( $newapp, 'T::MO::E::b' );
   $newapp->mock( 'get_counter', sub{ return 48058835; } );
   my $counter = $newapp->get_counter();
   is( $counter, $timestamp, 'Mocked get counter' );
@@ -289,16 +288,15 @@ subtest 'Gives correct data' => sub {
 
 subtest 'Set newpass' => sub {
   my $app2 = App::OATH->new();
+  my $newapp = Test::MockObject::Extends->new( $app );
+  isa_ok( $newapp, 'T::MO::E::c' );
+  $newapp->mock( '_read_password_stdin', sub{ return 'secure'; } );
   $app2->{'password'} = 'secret';
   $app2->set_filename( $filename );
-  $app->set_newpass( 1 );
-  {
-    open my $stdin, '<', \ "secure\n";
-    local *STDIN = $stdin;
-    $app->encrypt_data();
-    $app->save_data();
-  }
-  is( $app->get_password(), 'secure', 'New password set' );
+  $newapp->set_newpass( 1 );
+  $newapp->encrypt_data();
+  $newapp->save_data();
+  is( $newapp->get_password(), 'secure', 'New password set' );
 };
 
 subtest 'Gives correct data with new password' => sub {
@@ -310,7 +308,7 @@ subtest 'Gives correct data with new password' => sub {
   $app2->{'password'} = 'secure';
   $app2->set_filename( $filename );
   my $newapp = Test::MockObject::Extends->new( $app2 );
-  isa_ok( $newapp, 'T::MO::E::b' );
+  isa_ok( $newapp, 'T::MO::E::d' );
   $newapp->mock( 'get_counter', sub{ return 48058835; } );
   my $counter = $newapp->get_counter();
   is( $counter, $timestamp, 'Mocked get counter' );
@@ -345,7 +343,7 @@ subtest 'Key sort and length' => sub {
   my $timestamp = 48058835;
 
   my $newapp = Test::MockObject::Extends->new( $app );
-  isa_ok( $newapp, 'T::MO::E::c' );
+  isa_ok( $newapp, 'T::MO::E::e' );
   $newapp->mock( 'get_counter', sub{ return 48058835; } );
   my $counter = $newapp->get_counter();
   is( $counter, $timestamp, 'Mocked get counter' );

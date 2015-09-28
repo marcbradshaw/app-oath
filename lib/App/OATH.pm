@@ -10,7 +10,7 @@ use Fcntl ':flock';
 use File::HomeDir qw{ my_home };
 use JSON;
 use POSIX;
-use Term::ReadKey;
+use Term::ReadPassword;
 
 use App::OATH::Crypt;
 
@@ -318,15 +318,16 @@ sub drop_password {
     return;
 }
 
+sub _read_password_stdin {
+    my ( $self ) = @_;
+    my $password = read_password('Password:');
+    return $password;
+}
+
 sub get_password {
     my ( $self ) = @_;
     return $self->{'password'} if $self->{'password'};
-    print "Password:";
-    ReadMode('noecho');
-    my $password;
-    chomp($password = <STDIN>);
-    ReadMode(0);
-    print "\n";
+    my $password = $self->_read_password_stdin();
     $self->{'password'} = $password;
     delete $self->{'newpass'};
     return $password;
@@ -512,7 +513,7 @@ Get a lock, return 1 on success or 0 on failure
   File::HomeDir
   JSON
   POSIX
-  Term::ReadKey
+  Term::ReadPassword
 
 =head1 AUTHORS
 
