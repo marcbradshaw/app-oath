@@ -11,6 +11,7 @@ use File::HomeDir qw{ my_home };
 use JSON;
 use POSIX;
 use Term::ReadPassword;
+use Term::ReadPassword::Win32;
 
 use App::OATH::Crypt;
 
@@ -327,7 +328,13 @@ sub _read_password_stdin {
     # a wrapper around Term::ReadPassword
     # NB, Term::ReadPassword is not Win32 safe
     my ( $self ) = @_; # uncoverable statement
-    my $password = read_password('Password:'); # uncoverable statement
+    my $password; # uncoverable statement
+    if ( $^O eq 'MSWin32' ) { # uncoverable statement
+        $password = Term::ReadPassword::Win32::read_password('Password:'); # uncoverable statement
+    } # uncoverable statement
+    else { # uncoverable statement
+        $password = Term::ReadPassword::read_password('Password:'); # uncoverable statement
+    } # uncoverable statement
     return $password; # uncoverable statement
 }
 
@@ -521,6 +528,7 @@ Get a lock, return 1 on success or 0 on failure
   JSON
   POSIX
   Term::ReadPassword
+  Term::ReadPassword::Win32
 
 =head1 AUTHORS
 
