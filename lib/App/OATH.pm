@@ -6,6 +6,7 @@ use warnings;
 
 use Convert::Base32;
 use Digest::HMAC_SHA1 qw(hmac_sha1);
+use English qw{ -no_match_vars };
 use Fcntl ':flock';
 use File::HomeDir qw{ my_home };
 use JSON;
@@ -329,7 +330,7 @@ sub _read_password_stdin {
     # NB, Term::ReadPassword is not Win32 safe
     my ( $self ) = @_; # uncoverable statement
     my $password; # uncoverable statement
-    if ( $^O eq 'MSWin32' ) { # uncoverable statement
+    if ( $OSNAME eq 'MSWin32' ) { # uncoverable statement
         $password = Term::ReadPassword::Win32::read_password('Password:'); # uncoverable statement
     } # uncoverable statement
     else { # uncoverable statement
@@ -523,6 +524,7 @@ Get a lock, return 1 on success or 0 on failure
 
   Convert::Base32
   Digest::HMAC_SHA1
+  English
   Fcntl
   File::HomeDir
   JSON
