@@ -1,6 +1,8 @@
 
 {{$NEXT}}
 
+1.20151002 2015-10-02 Australia/Melbourne
+
  - Add a lock file to avoid race conditions
  - Homedir discovery using File::HomeDir (cross platform improvements)
  - Read password using Term::ReadPassword(::Win32) module
