@@ -4,7 +4,7 @@ App::OATH -  Simple OATH authenticator
 
 # BADGES
 
-[![Code on GitHub](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/marcbradshaw/app-oath) [![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath) [![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath) [![Open Issues](https://img.shields.io/github/issues/marcbradshaw/app-oath.svg)](https://github.com/marcbradshaw/app-oath/issues) [![Dist on CPAN](https://img.shields.io/cpan/v/App-OATH.svg)](https://metacpan.org/release/App-OATH) [![CPANTS](https://img.shields.io/badge/cpants-kwalitee-blue.svg)](http://cpants.cpanauthors.org/dist/App-OATH)
+[![Code on GitHub](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/marcbradshaw/app-oath) [![Build Status](https://travis-ci.org/marcbradshaw/app-oath.svg?branch=master)](https://travis-ci.org/marcbradshaw/app-oath) [![Coverage Status](https://coveralls.io/repos/marcbradshaw/app-oath/badge.svg)](https://coveralls.io/r/marcbradshaw/app-oath) [![Open Issues](https://img.shields.io/github/issues/marcbradshaw/app-oath.svg)](https://github.com/marcbradshaw/app-oath/issues) [![Dist on CPAN](https://img.shields.io/cpan/v/App-OATH.svg)](https://metacpan.org/release/App-OATH) [![CPANTS](https://img.shields.io/badge/cpants-kwalitee-blue.svg)](http://cpants.cpanauthors.org/dist/App-OATH) [![CPAN Testers](https://img.shields.io/badge/CPAN-Testers-blue.svg)](http://www.cpantesters.org/distro/A/App-OATH.html)
 
 # DESCRIPTION
 
