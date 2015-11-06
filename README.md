@@ -22,7 +22,7 @@ can be used with the same tokens.
 
 # USAGE
 
-usage: oath --add string --file filename --help --init --list --newpass --search string 
+usage: oath --add string --file filename --help --init --list --newpass --raw --search string 
 
 options:
 
@@ -52,6 +52,10 @@ options:
 \--newpass
 
     resave database with a new password
+
+\--raw
+
+    show the raw oath code (useful for migration to another device)
 
 \--search string
 

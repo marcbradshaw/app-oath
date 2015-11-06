@@ -27,7 +27,7 @@ sub new {
 
 sub usage {
     my ( $self ) = @_;
-    print "usage: $0 --add string --file filename --help --init --list --newpass --search string \n\n";
+    print "usage: $0 --add string --file filename --help --init --list --newpass --raw --search string \n\n";
     print "options:\n\n";
     print "--add string\n";
     print "    add a new password to the database, the format can be one of the following\n"; 
@@ -43,9 +43,17 @@ sub usage {
     print "    list keys in database\n\n";
     print "--newpass\n";
     print "    resave database with a new password\n\n";
+    print "--raw\n";
+    print "    show the raw oath code (useful for migration to another device)\n\n";
     print "--search string\n";
     print "    search database for keys matching string\n\n";
     exit 0;
+}
+
+sub set_raw {
+    my ( $self ) = @_;
+    $self->{'raw'} = 1;
+    return;
 }
 
 sub set_search {
@@ -159,7 +167,12 @@ sub display_codes {
             next if ( index( lc $account, lc $search ) == -1 );
         }
         my $secret = uc $data->{ $account };
-        printf( '%*3$s : %s' . "\n", $account, $self->oath_auth( $secret, $counter ), $max_len );
+        if ( $self->{'raw'} ) {
+            printf( '%*3$s : %s' . "\n", $account, $secret, $max_len );
+        }
+        else {
+            printf( '%*3$s : %s' . "\n", $account, $self->oath_auth( $secret, $counter ), $max_len );
+        }
     }
     print "\n";
     return;
