@@ -443,6 +443,10 @@ Instantiate a new object
 
 Display usage and exit
 
+=item I<set_raw()>
+
+Show the raw OATH code rather than decoding
+
 =item I<set_search()>
 
 Set the search parameter
