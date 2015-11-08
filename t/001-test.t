@@ -352,6 +352,12 @@ subtest 'Key sort and length' => sub {
   my $expected = "\n   alice : 205414\n     bob : 205414\ncatriona : 205414\n\n";
   is( $trap->stdout, $expected, 'Shows correct codes properly sorted and justified' );
 
+  $app->set_raw();
+  @a = trap{ $app->display_codes() };
+  my $expected = "\n   alice : JBSWY3DPEHPK3PXP\n     bob : JBSWY3DPEHPK3PXP\ncatriona : JBSWY3DPEHPK3PXP\n\n";
+  is( $trap->stdout, $expected, 'Shows correct raw codes properly sorted and justified' );
+  delete $app->{'raw'};
+
   $app->set_filename( $filename );
 
 };
