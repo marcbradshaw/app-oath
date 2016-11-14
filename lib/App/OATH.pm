@@ -11,6 +11,9 @@ use Fcntl ':flock';
 use File::HomeDir qw{ my_home };
 use JSON;
 use POSIX;
+use URL::Encode qw{ url_encode };
+use Text::QRCode;
+use Term::ANSIColor;
 
 use App::OATH::Crypt;
 
@@ -32,7 +35,7 @@ sub new {
 
 sub usage {
     my ( $self ) = @_;
-    print "usage: $0 --add string --file filename --help --init --list --newpass --raw --search string \n\n";
+    print "usage: $0 --add string --file filename --help --init --list --newpass --raw --rawqr --search string \n\n";
     print "options:\n\n";
     print "--add string\n";
     print "    add a new password to the database, the format can be one of the following\n"; 
@@ -50,6 +53,8 @@ sub usage {
     print "    resave database with a new password\n\n";
     print "--raw\n";
     print "    show the raw oath code (useful for migration to another device)\n\n";
+    print "--rawqr\n";
+    print "    show the raw oath code as an importable qr code (useful for migration to another device)\n\n";
     print "--search string\n";
     print "    search database for keys matching string\n\n";
     exit 0;
@@ -58,6 +63,12 @@ sub usage {
 sub set_raw {
     my ( $self ) = @_;
     $self->{'raw'} = 1;
+    return;
+}
+
+sub set_rawqr {
+    my ( $self ) = @_;
+    $self->{'rawqr'} = 1;
     return;
 }
 
@@ -175,12 +186,57 @@ sub display_codes {
         if ( $self->{'raw'} ) {
             printf( '%*3$s : %s' . "\n", $account, $secret, $max_len );
         }
+        elsif ( $self->{'rawqr'} ) {
+            my $account_enc = url_encode( $account );
+            my $url = 'otpauth://totp/' . $account_enc . '?secret=' . $secret;
+            my $qrcode = $self->make_qr( $url );
+            printf( "%s\n%s\n", $account, $qrcode );
+        }
         else {
             printf( '%*3$s : %s' . "\n", $account, $self->oath_auth( $secret, $counter ), $max_len );
         }
     }
     print "\n";
     return;
+}
+
+sub make_qr {
+    my ( $self, $string ) = @_;
+    my $qr = Text::QRCode->new();
+    my $code = $qr->plot( $string );
+    my $qrcode = q{};
+    my $width = scalar @{$code->[0]};
+
+    my $pad = q{};
+    $pad .= color('white on_white');
+    for( my $i=0 ;$i<$width+4;$i++ ) {
+        $pad .= color('white on_white') . '  ';
+    }
+    $pad .= color('reset');
+    $pad .= "\n";
+
+    $qrcode .= $pad .$pad;
+
+    foreach my $row ( @$code ) {
+        $qrcode .= color('white on_white') . '    ';
+        foreach my $col ( @$row ) {
+            if ( $col eq ' ' ) {
+                $qrcode .= color('white on_white');
+            }
+            else {
+                $qrcode .= color('black on_black');
+            }
+            $qrcode .= $col . $col;
+            $qrcode .= color('reset');
+        }
+        $qrcode .= color('white on_white') . '    ';
+        $qrcode .= color('reset');
+        $qrcode .= "\n";
+    }
+
+    $qrcode .= $pad .$pad;
+
+    return $qrcode;
 }
 
 sub oath_auth {

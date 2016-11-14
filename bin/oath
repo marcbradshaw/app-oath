@@ -15,6 +15,7 @@ my $list;
 my $newpass;
 my $search;
 my $raw;
+my $rawqr;
 
 if ( ! GetOptions(
     'add=s'    => \$add,
@@ -25,6 +26,7 @@ if ( ! GetOptions(
     'newpass'  => \$newpass,
     'search=s' => \$search,
     'raw'      => \$raw,
+    'rawqr'    => \$rawqr,
 ) ) {
     $help = 1;
 }
@@ -39,6 +41,7 @@ if ( $help ) {
 $app->set_search( $search )   if $search;
 $app->set_filename( $file )   if $file;
 $app->set_raw()               if $raw;
+$app->set_rawqr()             if $rawqr;
 $app->init()                  if $init;
 
 $app->get_lock() || die 'File is already locked';
