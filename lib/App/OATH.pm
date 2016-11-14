@@ -11,10 +11,15 @@ use Fcntl ':flock';
 use File::HomeDir qw{ my_home };
 use JSON;
 use POSIX;
-use Term::ReadPassword;
-use Term::ReadPassword::Win32;
 
 use App::OATH::Crypt;
+
+if ( $OSNAME eq 'MSWin32' ) { # uncoverable statement
+    require Term::ReadPassword::Win32; # uncoverable statement
+} # uncoverable statement
+else { # uncoverable statement
+    require Term::ReadPassword; # uncoverable statement
+} # uncoverable statement
 
 sub new {
     my ( $class ) = @_;
