@@ -9,6 +9,8 @@ perl:
 
 before_install:
    # Prevent "Please tell me who you are" errors for certain DZIL configs
+   - sudo apt-get update
+   - sudo apt-get -y install libdecodeqr-dev libdecodeqr
    - git config --global user.name "TravisCI"
    - cpanm -n Devel::Cover::Report::Coveralls Dist::Zilla::Plugin::OSPrereqs
 
