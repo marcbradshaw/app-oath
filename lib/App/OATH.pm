@@ -113,7 +113,7 @@ sub add_entry {
             print "Adding OTP for $key\n";
             $self->{'data_plaintext'}->{$key} = $value;
         }
-        
+
     }
     elsif ( $entry =~ /^[^:]+:[^:]+$/ ) {
         my ( $key, $value ) = $entry =~ /^([^:]+):([^:]+)$/;
@@ -125,7 +125,7 @@ sub add_entry {
             print "Adding OTP for $key\n";
             $self->{'data_plaintext'}->{$key} = $value;
         }
-        
+
     }
     else {
         print "Error: Unknown format\n";
@@ -134,7 +134,7 @@ sub add_entry {
 
     $self->encrypt_data();
     $self->save_data();
-    
+
     return;
 }
 
@@ -508,6 +508,10 @@ Display usage and exit
 
 Show the raw OATH code rather than decoding
 
+=item I<set_rawqr()>
+
+Show the raw OATH code as a QR code rather than decoding
+
 =item I<set_search()>
 
 Set the search parameter
@@ -535,6 +539,10 @@ Get the current time based counter
 =item I<display_codes()>
 
 Display a list of codes
+
+=item I<make_qr( $srting )>
+
+Format the given string as a QR code
 
 =item I<oath_auth()>
 

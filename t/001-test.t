@@ -358,6 +358,16 @@ subtest 'Key sort and length' => sub {
   is( $trap->stdout, $expected, 'Shows correct raw codes properly sorted and justified' );
   delete $app->{'raw'};
 
+  open my $inf,'<','t/qr.out';
+  my @expected_qr = <$inf>;
+  close $inf;
+
+  $app->set_rawqr();
+  @a = trap{ $app->display_codes() };
+  $expected = join( q{}, @expected_qr );
+  is( $trap->stdout, $expected, 'Shows correct raw codes properly sorted and justified' );
+  delete $app->{'rawqr'};
+
   $app->set_filename( $filename );
 
 };
