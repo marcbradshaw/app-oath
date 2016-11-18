@@ -57,6 +57,10 @@ options:
 
     show the raw oath code (useful for migration to another device)
 
+\--rawqr
+
+    show the raw oath code as an importable qr code (useful for migration to another device)
+
 \--search string
 
     search database for keys matching string
@@ -75,7 +79,7 @@ Marc Bradshaw <marc@marcbradshaw.net>
 
 # COPYRIGHT
 
-Copyright 2015
+Copyright 2016
 
 This library is free software; you may redistribute it and/or
 modify it under the same terms as Perl itself.
