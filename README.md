@@ -75,11 +75,11 @@ you should do your own research with regard to relevant attack vectors and use a
 
 # AUTHORS
 
-Marc Bradshaw <marc@marcbradshaw.net>
+Jemma Bradshaw <jemma@nothingbutstatic.dev>
 
 # COPYRIGHT
 
-Copyright 2016
+Copyright 2026
 
 This library is free software; you may redistribute it and/or
 modify it under the same terms as Perl itself.
